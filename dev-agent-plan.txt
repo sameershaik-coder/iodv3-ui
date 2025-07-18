@@ -1,0 +1,79 @@
+INVESTODIARY V3 - PROJECT SETUP PLAN
+
+1. Project Structure Setup
+   ├── backend/                 # Django backend
+   │   ├── investodiary/       # Main Django project
+   │   ├── apps/              # Django applications
+   │   ├── templates/         # HTML templates
+   │   ├── static/           # Static files
+   │   └── requirements.txt   # Python dependencies
+   └── frontend/              # Frontend assets
+       ├── styles/           # Tailwind CSS
+       ├── js/              # JavaScript files
+       └── package.json     # Node.js dependencies
+
+2. Development Environment Setup
+   - Python virtual environment
+   - Node.js and npm
+   - Django installation
+   - Database setup (SQLite)
+
+3. Backend Setup (Django)
+   - Create Django project
+   - Configure settings.py
+   - Set up URL routing
+   - Create initial models
+   - Configure authentication
+   - Set up HTMX middleware
+
+4. Frontend Setup
+   - Initialize package.json
+   - Configure Tailwind CSS
+   - Set up build process
+   - Create base templates
+   - Configure Alpine.js
+   - Set up HTMX
+
+5. Initial Features Setup
+   - User authentication system
+   - Base template structure
+   - Responsive navigation
+   - Mobile-first layout system
+
+6. Development Tools
+   - Django Debug Toolbar
+   - Browser development tools
+   - VS Code configuration
+   - Git setup
+
+7. Deployment Preparation
+   - Environment variables
+   - Static files configuration
+   - Database migrations
+   - Security settings
+
+NEXT STEPS:
+1. Create project directory structure
+2. Set up virtual environment
+3. Install Django and initial dependencies
+4. Initialize frontend build system
+5. Create base templates and styles
+
+TECH STACK DETAILS:
+- Backend: Django 4.x
+- Database: SQLite
+- Frontend:
+  - HTML (Django Templates)
+  - Tailwind CSS
+  - Alpine.js for interactive components
+  - HTMX for dynamic content
+  - Vanilla JavaScript for custom functionality
+- Build Tools:
+  - Node.js for asset compilation
+  - npm for package management
+
+MOBILE-FIRST CONSIDERATIONS:
+- Implement responsive breakpoints
+- Touch-friendly UI elements
+- Progressive enhancement
+- Performance optimization for mobile devices
