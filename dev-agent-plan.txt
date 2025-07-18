@@ -1,79 +1,168 @@
-INVESTODIARY V3 - PROJECT SETUP PLAN
+DJANGO + TAILWIND + HTMX SETUP GUIDE
 
-1. Project Structure Setup
-   ├── backend/                 # Django backend
-   │   ├── investodiary/       # Main Django project
-   │   ├── apps/              # Django applications
-   │   ├── templates/         # HTML templates
-   │   ├── static/           # Static files
-   │   └── requirements.txt   # Python dependencies
-   └── frontend/              # Frontend assets
-       ├── styles/           # Tailwind CSS
-       ├── js/              # JavaScript files
-       └── package.json     # Node.js dependencies
+1. Create Project and Virtual Environment
+   ```bash
+   mkdir myapp
+   cd myapp
+   python -m venv venv
+   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+   ```
 
-2. Development Environment Setup
-   - Python virtual environment
-   - Node.js and npm
-   - Django installation
-   - Database setup (SQLite)
+2. Install Dependencies
+   ```bash
+   pip install django django-tailwind django-browser-reload
+   pip freeze > requirements.txt
+   ```
 
-3. Backend Setup (Django)
-   - Create Django project
-   - Configure settings.py
-   - Set up URL routing
-   - Create initial models
-   - Configure authentication
-   - Set up HTMX middleware
+3. Create Django Project
+   ```bash
+   django-admin startproject config .
+   python manage.py startapp core
+   ```
 
-4. Frontend Setup
-   - Initialize package.json
-   - Configure Tailwind CSS
-   - Set up build process
-   - Create base templates
-   - Configure Alpine.js
-   - Set up HTMX
+4. Configure Django Settings (config/settings.py)
+   ```python
+   INSTALLED_APPS = [
+       'django.contrib.admin',
+       'django.contrib.auth',
+       'django.contrib.contenttypes',
+       'django.contrib.sessions',
+       'django.contrib.messages',
+       'django.contrib.staticfiles',
+       'tailwind',
+       'django_browser_reload',
+       'core',
+   ]
 
-5. Initial Features Setup
-   - User authentication system
-   - Base template structure
-   - Responsive navigation
-   - Mobile-first layout system
+   MIDDLEWARE = [
+       'django.middleware.security.SecurityMiddleware',
+       'django.contrib.sessions.middleware.SessionMiddleware',
+       'django.middleware.common.CommonMiddleware',
+       'django.middleware.csrf.CsrfViewMiddleware',
+       'django.contrib.auth.middleware.AuthenticationMiddleware',
+       'django.contrib.messages.middleware.MessageMiddleware',
+       'django.middleware.clickjacking.XFrameOptionsMiddleware',
+       'django_browser_reload.middleware.BrowserReloadMiddleware',
+   ]
 
-6. Development Tools
-   - Django Debug Toolbar
-   - Browser development tools
-   - VS Code configuration
-   - Git setup
+   INTERNAL_IPS = [
+       "127.0.0.1",
+   ]
 
-7. Deployment Preparation
-   - Environment variables
-   - Static files configuration
-   - Database migrations
-   - Security settings
+   TAILWIND_APP_NAME = 'theme'
+   ```
 
-NEXT STEPS:
-1. Create project directory structure
-2. Set up virtual environment
-3. Install Django and initial dependencies
-4. Initialize frontend build system
-5. Create base templates and styles
+5. Initialize Tailwind
+   ```bash
+   # First initialize tailwind
+   python manage.py tailwind init
+   
+   # Then update INSTALLED_APPS in settings.py to include 'theme'
+   # After this, install tailwind dependencies
+   python manage.py tailwind install
+   ```
 
-TECH STACK DETAILS:
-- Backend: Django 4.x
-- Database: SQLite
-- Frontend:
-  - HTML (Django Templates)
-  - Tailwind CSS
-  - Alpine.js for interactive components
-  - HTMX for dynamic content
-  - Vanilla JavaScript for custom functionality
-- Build Tools:
-  - Node.js for asset compilation
-  - npm for package management
+6. Create Base Template (templates/base.html)
+   ```html
+   <!DOCTYPE html>
+   <html>
+   <head>
+       {% load static %}
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>My App</title>
+       <script src="https://unpkg.com/htmx.org@1.9.7"></script>
+       <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+   </head>
+   <body class="bg-gray-100">
+       <main class="container mx-auto px-4">
+           {% block content %}{% endblock %}
+       </main>
+   </body>
+   </html>
+   ```
 
-MOBILE-FIRST CONSIDERATIONS:
-- Implement responsive breakpoints
-- Touch-friendly UI elements
-- Progressive enhancement
-- Performance optimization for mobile devices
+7. Create Example View (core/views.py)
+   ```python
+   from django.views.generic import TemplateView
+
+   class HomeView(TemplateView):
+       template_name = "core/home.html"
+   ```
+
+8. Create Example Template (core/templates/core/home.html)
+   ```html
+   {% extends "base.html" %}
+
+   {% block content %}
+   <div class="py-10">
+       <h1 class="text-3xl font-bold mb-4">Welcome</h1>
+       <button 
+           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+           hx-post="/api/hello"
+           hx-swap="outerHTML"
+       >
+           Click me
+       </button>
+   </div>
+   {% endblock %}
+   ```
+
+9. Configure URLs (config/urls.py)
+   ```python
+   from django.contrib import admin
+   from django.urls import path, include
+   from core.views import HomeView
+
+   urlpatterns = [
+       path('admin/', admin.site.urls),
+       path('', HomeView.as_view(), name='home'),
+       path("__reload__/", include("django_browser_reload.urls")),
+   ]
+   ```
+
+10. Project Structure
+    ```
+    myapp/
+    ├── manage.py
+    ├── requirements.txt
+    ├── config/
+    ├── core/
+    ├── templates/
+    ├── theme/
+    └── venv/
+    ```
+
+11. Development Commands
+    ```bash
+    # Terminal 1: Run Django server
+    python manage.py runserver
+
+    # Terminal 2: Run Tailwind CSS compiler
+    python manage.py tailwind start
+    ```
+
+Development Tips:
+- Access the site at http://localhost:8000
+- Tailwind CSS will auto-reload on changes
+- Use hx-* attributes for HTMX interactions
+- Place static files in static/ directory
+- Place templates in templates/ directory
+
+Common Commands:
+```bash
+# Database operations
+python manage.py makemigrations
+python manage.py migrate
+
+# Create admin user
+python manage.py createsuperuser
+
+# Collect static files
+python manage.py collectstatic
+```
+
+Remember to:
+- Add venv/ and *.pyc to .gitignore
+- Configure ALLOWED_HOSTS in settings.py
+- Set DEBUG=False in production
