@@ -74,3 +74,8 @@ python manage.py runserver
 
 ### Configuration Note
 The name "default" comes from the `TAILWIND_APP_NAME = 'default'` setting in Django configuration.
+
+### Docker commands
+docker-compose up --build
+- production mode
+docker-compose -f docker-compose.prod.yml up --build

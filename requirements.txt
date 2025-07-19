@@ -1,3 +1,7 @@
 django 
 django-tailwind 
 django-browser-reload
+
+# production dependencies
+gunicorn
+psycopg2-binary
